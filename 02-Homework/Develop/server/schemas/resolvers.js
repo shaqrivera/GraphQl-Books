@@ -1,4 +1,5 @@
 const { Book, User } = require('../models');
+const { signToken } = require('../utils/auth');
 
 const resolvers = {
   Query: {
@@ -11,8 +12,8 @@ const resolvers = {
       const user = await User.create(args);
       return user;
     },
-    login: async (parent, { username, password, email }) => {
-      const user = await User.findOne({ $or: [{ username: username }, { email: email }] });
+    login: async (parent, { password, email }) => {
+      const user = await User.findOne({ email: email} );
       if (!user) {
       return { message: "Can't find this user" };
     }
