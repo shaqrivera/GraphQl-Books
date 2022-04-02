@@ -73,7 +73,6 @@ const SearchBooks = () => {
     try {
       const user = Auth.getProfile(token);
       const {data} = await saveBook({variables: {book: bookToSave, id: user.data._id}});
-      console.log(data);
 
       if (!data) {
         throw new Error('something went wrong!');

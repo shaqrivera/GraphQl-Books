@@ -33,7 +33,6 @@ const SavedBooks = () => {
 
         const user = singleUser.getSingleUser;
         setUserData({...user});
-        console.log(userData);
       } catch (err) {
         console.error(err);
       }
@@ -54,7 +53,7 @@ const SavedBooks = () => {
     }
     const user = Auth.getProfile();
     try {
-      const {data} = await deleteBook({variables:{_id: user._id, bookId: bookId}});
+      const {data} = await deleteBook({variables:{id: user.data._id, bookId: bookId}});
 
       if (!data) {
         throw new Error('something went wrong!');
@@ -90,13 +89,13 @@ const SavedBooks = () => {
         <CardColumns>
           {userData.savedBooks?.map((book) => {
             return (
-              <Card key={book.bookId} border='dark'>
+              <Card key={book._id} border='dark'>
                 {book.image ? <Card.Img src={book.image} alt={`The cover for ${book.title}`} variant='top' /> : null}
                 <Card.Body>
                   <Card.Title>{book.title}</Card.Title>
                   <p className='small'>Authors: {book.authors}</p>
                   <Card.Text>{book.description}</Card.Text>
-                  <Button className='btn-block btn-danger' onClick={() => handleDeleteBook(book.bookId)}>
+                  <Button className='btn-block btn-danger' onClick={() => handleDeleteBook(book._id)}>
                     Delete this Book!
                   </Button>
                 </Card.Body>
