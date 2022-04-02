@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Jumbotron, Container, CardColumns, Card, Button } from 'react-bootstrap';
-
+import {useLazyQuery, useMutation} from '@apollo/client';
 import { getMe, deleteBook } from '../utils/API';
+import {QUERY_SINGLE_USER, MUTATION_DELETE_BOOK} from '../utils/queries.js';
 import Auth from '../utils/auth';
 import { removeBookId } from '../utils/localStorage';
 
 const SavedBooks = () => {
   const [userData, setUserData] = useState({});
+  const [getSingleUser, {loading, data}]= useLazyQuery(QUERY_SINGLE_USER);
 
   // use this to determine if `useEffect()` hook needs to run again
   const userDataLength = Object.keys(userData).length;
@@ -20,13 +22,13 @@ const SavedBooks = () => {
           return false;
         }
 
-        const response = await getMe(token);
+        const {_id} = token;
 
-        if (!response.ok) {
-          throw new Error('something went wrong!');
-        }
+        const response = await getSingleUser({variables:{id: _id}});
 
-        const user = await response.json();
+        
+
+        const user = response;
         setUserData(user);
       } catch (err) {
         console.error(err);

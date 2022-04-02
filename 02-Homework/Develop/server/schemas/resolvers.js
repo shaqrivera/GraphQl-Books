@@ -4,27 +4,30 @@ const { signToken } = require('../utils/auth');
 const resolvers = {
   Query: {
     getSingleUser: async (parent, args) => {
-      return User.findById(args._id)
+      return User.findById(args.id)
     }
   },
   Mutation: {
     createUser: async (parent, args) => {
-      const user = await User.create(args);
+      const user = await User.create({...args});
       return user;
     },
     login: async (parent, { password, email }) => {
       const user = await User.findOne({ email: email} );
       if (!user) {
-      return { message: "Can't find this user" };
+      return console.log("Can't find this user" );
     }
-
+    
     const correctPw = await user.isCorrectPassword(password);
 
     if (!correctPw) {
-      return { message: 'Wrong password!' };
+      return console.log('Wrong password!');
     }
     const token = signToken(user);
-    return{ token, user };
+    
+    
+    return token;
+
     },
     saveBook: async (parent, {_id, bookId, authors, description, image, link, title}) => {
     const book = {bookId, authors, description, image, link, title}

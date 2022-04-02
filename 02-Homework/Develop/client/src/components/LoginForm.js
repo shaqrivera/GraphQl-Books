@@ -4,14 +4,13 @@ import { Form, Button, Alert } from 'react-bootstrap';
 import { useMutation } from '@apollo/client';
 import { MUTATION_LOGIN } from '../utils/queries';
 
-import { loginUser } from '../utils/API';
 import Auth from '../utils/auth';
 
 const LoginForm = () => {
   const [userFormData, setUserFormData] = useState({ email: '', password: '' });
   const [validated] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
-  const [login, {  error }] = useMutation(MUTATION_LOGIN);
+  const [login] = useMutation(MUTATION_LOGIN);
   
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -30,11 +29,16 @@ const LoginForm = () => {
 
     try {
       
-      const response = await login({ variables: {email: userFormData.email, password: userFormData.password}});
-
-      const { token, user } = response;
-      console.log(user);
-      Auth.login(token);
+      const {data} = await login({ variables: {email: userFormData.email, password: userFormData.password}});
+      
+      if(data.login){
+       Auth.login(data.login);   
+      }
+      else{
+        throw new Error('Wrong email or password')
+      }
+      
+      
     } catch (err) {
       console.error(err);
       setShowAlert(true);

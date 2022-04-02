@@ -46,12 +46,7 @@ mutation Mutation($id: ID!, $bookId: ID!) {
 `;
 
 export const MUTATION_LOGIN = gql`
-mutation Mutation($password: String!, $email: String!) {
-    login(password: $password, email: $email) {
-      _id
-      username
-      email
-      
-    }
-  }
+mutation Mutation($email: String, $password: String) {
+  login(email: $email, password: $password)
+}
 `
