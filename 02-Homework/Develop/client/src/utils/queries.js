@@ -12,13 +12,9 @@ query GetSingleUser($id: ID!) {
 `;
 
 export const MUTATION_CREATE_USER = gql`
-mutation Mutation($username: String!, $email: String!, $password: String!) {
-    createUser(username: $username, email: $email, password: $password){
-      username
-      email
-      _id
-    } 
-    }
+mutation Signup($username: String!, $email: String!, $password: String!) {
+  createUser(username: $username, email: $email, password: $password) 
+}
       
 `;
 
